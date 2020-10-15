@@ -2,7 +2,8 @@
 Import-Module activedirectory
 #Call by LoadWithPartialName to generate a input box.
 [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')| out-null
-
+#Get date and time of the running of the script
+$timestamp = Get-Date -Format "dd-MM-yyyy.HH:mm"
 #Adquire csv name
 $csvname = [Microsoft.VisualBasic.Interaction]::InputBox("Nombre del CSV") 
 #Adquire Domain name
@@ -40,6 +41,7 @@ foreach ($User in $ADUsers)
     {
          #If user does exist, give a warning
          Write-Warning "A user account with username $Username already exist in Active Directory."
+         Write-Warning "The account $username exists" | Out-File -FilePath
     }
     else
     {
