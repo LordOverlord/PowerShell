@@ -1,13 +1,20 @@
 # Import active directory module for running AD cmdlets
 Import-Module activedirectory
+
 #Call by LoadWithPartialName to generate a input box.
-[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')| out-null
+[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
+
 #Get date and time of the running of the script
 $timestamp = Get-Date -Format "dd-MM-yyyy.HH:mm"
+
+#count of elements procesed
+$count = 0
 #Adquire csv name
-$csvname = [Microsoft.VisualBasic.Interaction]::InputBox("Nombre del CSV") 
+$csvname = [Microsoft.VisualBasic.Interaction]::InputBox("Nombre del CSV",["Ingresa CSV"]) 
+
 #Adquire Domain name
-$domain = [Microsoft.VisualBasic.Interaction]::InputBox("Indica el dominio, ex: contoso.com")
+$domain = [Microsoft.VisualBasic.Interaction]::InputBox("Indica el dominio, ex: contoso.com",["Ingresa Dominio"])
+
 #Store the data from ADUsers.csv in the $ADUsers variable
 $ADUsers = Import-csv $csvname
 
@@ -41,7 +48,8 @@ foreach ($User in $ADUsers)
     {
          #If user does exist, give a warning
          Write-Warning "A user account with username $Username already exist in Active Directory."
-         Write-Warning "The account $username exists" | Out-File -FilePath
+         Write-Warning "The account $username exists" | Out-File -FilePath .\log.$timestamp.txt -Append
+        $count = $count + 1
     }
     else
     {
@@ -67,8 +75,9 @@ foreach ($User in $ADUsers)
             -Department $department `
             -Office $office `
             -Description $Description `
-            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True
+            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True | Out-File -FilePath .\log.$timestamp.txt -Append
+            $count = $count + 1
             
     }
 }
-Write-Host "Proceso Terminado, procesados $ADUsers.Count"
+Write-Host "Alta Terminada, procesados $count"
