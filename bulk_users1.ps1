@@ -48,7 +48,7 @@ foreach ($User in $ADUsers)
     {
          #If user does exist, give a warning
          Write-Warning "A user account with username $Username already exist in Active Directory."
-         Write-Warning "The account $username exists" | Out-File -FilePath .\log.txt -Append
+         Write-Output "The account $username exists" | Out-File -FilePath .\log.txt -Append
         $count = $count + 1
     }
     else
@@ -75,7 +75,8 @@ foreach ($User in $ADUsers)
             -Department $department `
             -Office $office `
             -Description $Description `
-            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True | Out-File -FilePath .\log.txt -Append
+            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True 
+            Write-Output "The $username was created" | Out-File -FilePath .\log.txt -Append
             $count = $count + 1
             
     }
