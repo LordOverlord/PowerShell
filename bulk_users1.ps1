@@ -10,10 +10,10 @@ $timestamp = Get-Date -Format "dd-MM-yyyy.HH:mm"
 #count of elements procesed
 $count = 0
 #Adquire csv name
-$csvname = [Microsoft.VisualBasic.Interaction]::InputBox("Nombre del CSV",["Ingresa CSV"]) 
+$csvname = [Microsoft.VisualBasic.Interaction]::InputBox("Nombre del CSV","Ingresa CSV") 
 
 #Adquire Domain name
-$domain = [Microsoft.VisualBasic.Interaction]::InputBox("Indica el dominio, ex: contoso.com",["Ingresa Dominio"])
+$domain = [Microsoft.VisualBasic.Interaction]::InputBox("Indica el dominio, ex: contoso.com","Ingresa Dominio")
 
 #Store the data from ADUsers.csv in the $ADUsers variable
 $ADUsers = Import-csv $csvname
@@ -48,7 +48,7 @@ foreach ($User in $ADUsers)
     {
          #If user does exist, give a warning
          Write-Warning "A user account with username $Username already exist in Active Directory."
-         Write-Warning "The account $username exists" | Out-File -FilePath .\log.$timestamp.txt -Append
+         Write-Warning "The account $username exists" | Out-File -FilePath .\log.txt -Append
         $count = $count + 1
     }
     else
@@ -75,7 +75,7 @@ foreach ($User in $ADUsers)
             -Department $department `
             -Office $office `
             -Description $Description `
-            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True | Out-File -FilePath .\log.$timestamp.txt -Append
+            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True | Out-File -FilePath .\log.txt -Append
             $count = $count + 1
             
     }
